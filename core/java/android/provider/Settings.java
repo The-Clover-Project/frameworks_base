@@ -20792,6 +20792,13 @@ public final class Settings {
         public static final String SCENE_CONTAINER_ENABLED = "scene_container_enabled";
 
         /**
+         * Whether to wake the display when plugging or unplugging the charger
+         * @hide
+         */
+        public static final String WAKE_WHEN_PLUGGED_OR_UNPLUGGED =
+                "wake_when_plugged_or_unplugged";
+
+        /**
          * Settings migrated from Wear OS settings provider.
          * @hide
          */
