@@ -47,4 +47,11 @@
     <java-symbol type="array" name="global_device_configs_override" />
     <java-symbol type="array" name="device_configs_override" />
 
+    <!-- Status bar network traffic monitor -->
+    <java-symbol type="dimen" name="net_traffic_text_size" />
+    <java-symbol type="string" name="kilobitspersecond_short" />
+    <java-symbol type="string" name="megabitspersecond_short" />
+    <java-symbol type="string" name="kilobytespersecond_short" />
+    <java-symbol type="string" name="megabytespersecond_short" />
+
 </resources>
