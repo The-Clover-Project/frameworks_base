@@ -281,5 +281,6 @@ public class SystemSettingsValidators {
                 System.CV_PREFERRED_INTENSITY,
                 new InclusiveIntegerRangeValidator(
                         CV_PREFERRED_INTENSITY_MIN, CV_PREFERRED_INTENSITY_MAX));
+        VALIDATORS.put(System.ADVANCED_REBOOT, BOOLEAN_VALIDATOR);
     }
 }
