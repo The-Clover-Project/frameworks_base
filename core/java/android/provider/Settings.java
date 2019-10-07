@@ -13327,6 +13327,12 @@ public final class Settings {
         public static final String GMS_CERT_CHAIN = "gms_cert_chain";
 
         /**
+         * Whether to enable DOZE only when charging
+         * @hide
+         */
+        public static final String DOZE_ON_CHARGE = "doze_on_charge";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
