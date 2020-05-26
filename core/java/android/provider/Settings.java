@@ -13321,6 +13321,12 @@ public final class Settings {
         public static final String VBOOT_HASH = "vboot_hash";
 
         /**
+         * Whether to use black theme for dark mode
+         * @hide
+         */
+        public static final String BERRY_BLACK_THEME = "berry_black_theme";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
