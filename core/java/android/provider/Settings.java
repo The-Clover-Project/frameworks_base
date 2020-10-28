@@ -6748,6 +6748,12 @@ public final class Settings {
          * @hide
          */
         public static final String SMART_5G = "smart_5g";
+
+        /**
+         * Whether or not volume button music controls should be enabled to seek media tracks
+         * @hide
+         */
+        public static final String VOLBTN_MUSIC_CONTROLS = "volbtn_music_controls";
         
         /**
          * Whether to take partial screenshot with volume down + power click.
