@@ -33,6 +33,9 @@
     <!-- Color of the UDFPS pressed view -->
     <color name="config_udfpsColor">#ffffffff</color>
 
+    <!-- If not zero, limits the internal screen recorder's framerate to the set value. -->
+    <integer name="config_screenRecorderMaxFramerate">0</integer>
+
     <!-- Array of brightness-alpha LUT for framework dimming -->
     <string-array name="config_udfpsDimmingBrightnessAlphaArray" translatable="false">
           <item>1,248</item>
