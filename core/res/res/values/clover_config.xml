@@ -37,4 +37,7 @@
     <bool name="config_dt2sGestureAvailable">false</bool>
     <bool name="config_dt2sGestureEnabledByDefault">false</bool>
 
+    <!-- Whether to force enable multi resolution configuration for camera -->
+    <bool name="config_forceMultiResolution">false</bool>
+
 </resources>
