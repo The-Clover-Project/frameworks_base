@@ -117,4 +117,7 @@
     <!-- Title for the 4G/LTE icon toggle in status bar tuner. -->
     <string name="status_bar_show_4g_for_lte">Show 4G instead of LTE</string>
 
+    <!-- Title for the Roaming indicator icon toggle in status bar tuner. -->
+    <string name="status_bar_roaming">Roaming indicator</string>
+
 </resources>
