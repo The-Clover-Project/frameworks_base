@@ -62,6 +62,7 @@ import android.view.Window;
 import android.view.WindowManagerGlobal;
 
 import com.android.internal.content.ReferrerIntent;
+import com.android.internal.util.clover.GamesPropsUtils;
 import com.android.internal.util.clover.PropImitationHooks;
 
 import java.io.File;
@@ -1353,6 +1354,7 @@ public class Instrumentation {
                 .instantiateApplication(cl, className);
         app.attach(context);
         PropImitationHooks.setProps(context);
+        GamesPropsUtils.setProps(app);
         return app;
     }
     
@@ -1371,6 +1373,7 @@ public class Instrumentation {
         Application app = (Application)clazz.newInstance();
         app.attach(context);
         PropImitationHooks.setProps(context);
+        GamesPropsUtils.setProps(app);
         return app;
     }
 
