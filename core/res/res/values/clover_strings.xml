@@ -81,4 +81,7 @@
     <string name="reboot_title">Reboot</string>
     <string name="reboot_message">Rebooting system</string>
 
+    <!-- GameSpace -->
+    <string name="gamespace_new_game_added"><xliff:g id="name" example="MyApp">%s</xliff:g> added to GameSpace</string>
+
 </resources>

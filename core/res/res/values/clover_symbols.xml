@@ -152,4 +152,7 @@
     <java-symbol type="string" name="config_stockFingerprint" />
     <java-symbol type="string" name="config_netflixSpoofModel" />
 
+    <!-- GameSpace -->
+    <java-symbol type="string" name="gamespace_new_game_added" />
+
 </resources>
