@@ -70,7 +70,8 @@ public class AutoBrightnessTile extends QSTileImpl<BooleanState> {
 
     private static final Intent DISPLAY_SETTINGS = new Intent("android.settings.DISPLAY_SETTINGS");
 
-    private final Icon mIcon = ResourceIcon.get(R.drawable.ic_qs_autobrightness);
+    @Nullable
+    private Icon mIcon = null;
 
     private boolean mListening;
 
@@ -127,9 +128,12 @@ public class AutoBrightnessTile extends QSTileImpl<BooleanState> {
 
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
+        if (mIcon == null) {
+            mIcon = maybeLoadResourceIcon(R.drawable.ic_qs_autobrightness);
+        }
+        state.icon = mIcon;
         state.value = isChecked();
         state.label = mContext.getString(R.string.quick_settings_autobrightness_label);
-        state.icon = ResourceIcon.get(R.drawable.ic_qs_autobrightness);
         state.contentDescription =  mContext.getString(
                    R.string.quick_settings_autobrightness_label);
         if (state.value) {
