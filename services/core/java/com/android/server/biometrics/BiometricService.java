@@ -334,16 +334,7 @@ public class BiometricService extends SystemService {
         public void updateContentObserver() {
             mContentResolver.unregisterContentObserver(this);
 
-            if (SenseUtils.canUseProvider()) {
-                mContentResolver.registerContentObserver(FACE_UNLOCK_KEYGUARD_ENABLED,
-                        false /* notifyForDescendants */,
-                        this /* observer */,
-                        UserHandle.USER_ALL);
-                mContentResolver.registerContentObserver(FACE_UNLOCK_APP_ENABLED,
-                        false /* notifyForDescendants */,
-                        this /* observer */,
-                        UserHandle.USER_ALL);
-            } else if (com.android.settings.flags.Flags.biometricsOnboardingEducation()) {
+            if (com.android.settings.flags.Flags.biometricsOnboardingEducation()) {
                 mContentResolver.registerContentObserver(FINGERPRINT_KEYGUARD_ENABLED,
                         false /* notifyForDescendants */,
                         this /* observer */,
@@ -361,6 +352,7 @@ public class BiometricService extends SystemService {
                         this /* observer */,
                         UserHandle.USER_ALL);
             } else {
+                // Always register standard biometric settings for proper user control
                 mContentResolver.registerContentObserver(BIOMETRIC_KEYGUARD_ENABLED,
                         false /* notifyForDescendants */,
                         this /* observer */,
@@ -369,6 +361,18 @@ public class BiometricService extends SystemService {
                         false /* notifyForDescendants */,
                         this /* observer */,
                         UserHandle.USER_ALL);
+                
+                // Also register legacy face unlock settings for SenseProvider compatibility
+                if (SenseUtils.canUseProvider()) {
+                    mContentResolver.registerContentObserver(FACE_UNLOCK_KEYGUARD_ENABLED,
+                            false /* notifyForDescendants */,
+                            this /* observer */,
+                            UserHandle.USER_ALL);
+                    mContentResolver.registerContentObserver(FACE_UNLOCK_APP_ENABLED,
+                            false /* notifyForDescendants */,
+                            this /* observer */,
+                            UserHandle.USER_ALL);
+                }
             }
             mContentResolver.registerContentObserver(FACE_UNLOCK_ALWAYS_REQUIRE_CONFIRMATION,
                     false /* notifyForDescendants */,
@@ -481,11 +485,7 @@ public class BiometricService extends SystemService {
                 }
             } else {
                 if (!mBiometricEnabledOnKeyguard.containsKey(userId)) {
-                    if (SenseUtils.canUseProvider()) {
-                        onChange(true /* selfChange */, FACE_UNLOCK_KEYGUARD_ENABLED, userId);
-                    } else {
-                        onChange(true /* selfChange */, BIOMETRIC_KEYGUARD_ENABLED, userId);
-                    }
+                    onChange(true /* selfChange */, BIOMETRIC_KEYGUARD_ENABLED, userId);
                 }
                 return mBiometricEnabledOnKeyguard.get(userId);
             }
@@ -509,11 +509,7 @@ public class BiometricService extends SystemService {
                 }
             } else {
                 if (!mBiometricEnabledForApps.containsKey(userId)) {
-                    if (SenseUtils.canUseProvider()) {
-                        onChange(true /* selfChange */, FACE_UNLOCK_APP_ENABLED, userId);
-                    } else {
-                        onChange(true /* selfChange */, BIOMETRIC_APP_ENABLED, userId);
-                    }
+                    onChange(true /* selfChange */, BIOMETRIC_APP_ENABLED, userId);
                 }
                 return mBiometricEnabledForApps.getOrDefault(userId, DEFAULT_APP_ENABLED);
             }
