@@ -120,4 +120,9 @@
     <!-- Title for the Roaming indicator icon toggle in status bar tuner. -->
     <string name="status_bar_roaming">Roaming indicator</string>
 
+    <!-- Volume QS Tile -->
+    <string name="quick_settings_volume_label">Volume</string>
+    <string name="qs_volume_dialog_title">Volume Control</string>
+    <string name="qs_volume_dialog_mute">Mute</string>
+
 </resources>
