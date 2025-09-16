@@ -134,4 +134,7 @@
     <string name="location_privacy_indicator_title">Location privacy indicator</string>
     <string name="projection_privacy_indicator_title">Media projection privacy indicator</string>
 
+    <!-- 4G icon -->
+    <string name="show_fourg_icon_title">4G icon</string>
+
 </resources>
