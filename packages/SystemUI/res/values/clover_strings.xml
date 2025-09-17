@@ -135,7 +135,7 @@
     <string name="projection_privacy_indicator_title">Media projection privacy indicator</string>
 
     <!-- 4G icon -->
-    <string name="show_fourg_icon_title">4G icon</string>
+    <string name="show_fourg_icon_title">4G network indicator</string>
 
     <!-- WiFi Standard icon -->
     <string name="wifi_standard_icon_title">WiFi standard</string>
