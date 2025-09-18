@@ -275,6 +275,7 @@ public class ThemeOverlayApplier implements Dumpable {
         OverlayManagerTransaction.Builder transaction = getTransactionBuilder();
         try {
             transaction.setEnabled(getOverlayID(OVERLAY_BLACK_THEME), isBlackMode, currentUser);
+            transaction.setEnabled(getOverlayID("android:neutral"), !isBlackMode, currentUser);
             mOverlayManager.commit(transaction.build());
             if (onComplete != null) {
                 Log.d(TAG, "Executing onComplete runnable");
