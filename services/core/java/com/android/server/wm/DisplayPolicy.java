@@ -1407,7 +1407,7 @@ public class DisplayPolicy {
             return;
         }
 
-        final WindowManager.LayoutParams lp = win.getAttrs();
+        final WindowManager.LayoutParams lp = win.mAttrs;
         String pkg = win.getOwningPackage();
         if (lp != null && pkg != null && mFullscreenCutoutApps.contains(pkg)) {
             lp.layoutInDisplayCutoutMode =
