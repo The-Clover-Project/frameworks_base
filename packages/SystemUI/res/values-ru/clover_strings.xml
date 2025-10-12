@@ -58,7 +58,7 @@
     <string name="status_bar_network_speed">Скорость интернета</string>
 
     <!-- Name of the NFC status bar icon -->
-    <string name="status_bar [CHAR LIMIT=NONE] -->
+    <string name="status_bar_nfc">NFC</string>
     <string name="accessibility_status_bar_nfc">NFC</string>
 
     <!-- Name of the HD calling status bar icon. -->
@@ -106,9 +106,13 @@
     <string name="screenshot_delete_description">Удалить скриншот</string>
 
     <!-- Advanced Reboot -->
-    <string name="global_action_restart_advanced">Advanced / Дополнительно</string>
-    <string name="global_action_restart_recovery">Recovery / Рекавери</string>
-    <string name="global <string name="face_unlock_recognizing">Распознавание лица...</string>
+    <string name="global_action_restart_advanced">Дополнительно</string>
+    <string name="global_action_restart_recovery">Рекавери</string>
+    <string name="global_action_restart_bootloader">загрузчик</string>
+    <string name="global_action_restart_ui">Системный интерфейс</string>
+    
+    <!-- Text while recognizing face -->
+    <string name="face_unlock_recognizing">Распознавание лица...</string>
 
     <!-- Screen record -->
     <string name="screenrecord_lowquality_label">Низкое качество</string>
@@ -129,7 +133,9 @@
     <string name="projection_privacy_indicator_title">Индикатор записи экрана</string>
 
     <!-- 4G icon -->
-    <string name="show_f Standard icon -->
+    <string name="show_fourg_icon_title">Индикатор сети 4G</string>
+    
+    <!-- WiFi Standard icon -->
     <string name="wifi_standard_icon_title">Стандарт Wi-Fi</string>
 
 </resources>
