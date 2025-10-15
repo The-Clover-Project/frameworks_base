@@ -180,9 +180,11 @@ constructor(
                 if (com.android.systemui.shared.Flags.clockReactiveSmartspaceLayout()) {
                     keyguardClockViewModel.getLargeClockTopMargin() +
                         getDimen(ENHANCED_SMARTSPACE_HEIGHT)
-                } else {
+                } else if (smartspaceViewModel.isSmartspaceEnabled) {
                     keyguardClockViewModel.getLargeClockTopMargin() +
                         getDimen(DATE_WEATHER_VIEW_HEIGHT)
+                } else {
+                    keyguardClockViewModel.getLargeClockTopMargin()
                 }
             connect(
                 customR.id.lockscreen_clock_view_large,
