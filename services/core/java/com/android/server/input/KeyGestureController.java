@@ -85,6 +85,7 @@ import com.android.internal.util.ScreenshotHelper;
 import com.android.internal.util.ScreenshotRequest;
 import com.android.server.LocalServices;
 import com.android.server.pm.UserManagerInternal;
+import com.android.server.policy.WindowManagerPolicy.WindowManagerFuncs;
 import com.android.server.wm.WindowManagerInternal;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -105,7 +106,7 @@ import java.util.Set;
  * A thread-safe component of {@link InputManagerService} responsible for managing callbacks when a
  * key gesture event occurs.
  */
-final class KeyGestureController {
+public final class KeyGestureController {
 
     private static final String TAG = "KeyGestureController";
 
@@ -159,6 +160,7 @@ final class KeyGestureController {
     static final long KEY_INTERCEPT_RESULT_NOT_CONSUMED = 0;
 
     private final Context mContext;
+    private WindowManagerFuncs mWindowManagerFuncs;
     private InputManagerService.WindowManagerCallbacks mWindowManagerCallbacks;
     private final Handler mHandler;
     private final Handler mIoHandler;
@@ -177,6 +179,8 @@ final class KeyGestureController {
     @UserIdInt
     @GuardedBy("mUserLock")
     private int mCurrentUserId = UserHandle.USER_SYSTEM;
+    private boolean haveEnableGesture = false;
+    private SwipeToScreenshotListener mSwipeToScreenshot;
 
     // Pending actions
     private boolean mPendingMetaAction;
@@ -237,6 +241,13 @@ final class KeyGestureController {
         mSettingsObserver = new SettingsObserver(mHandler);
         mAppLaunchShortcutManager = new AppLaunchShortcutManager(mContext);
         mInputGestureManager = new InputGestureManager(mContext);
+        mSwipeToScreenshot = new SwipeToScreenshotListener(mContext, new SwipeToScreenshotListener.Callbacks() {
+            @Override
+            public void onSwipeThreeFinger() {
+                mHandler.sendMessage(mHandler.obtainMessage(MSG_SCREENSHOT_SHORTCUT,
+                        SCREENSHOT_KEY_OTHER, DEFAULT_DISPLAY));
+            }
+        });
         mAccessibilityShortcutController = injector.getAccessibilityShortcutController(mContext,
                 mHandler);
         mDisplayManager = Objects.requireNonNull(mContext.getSystemService(DisplayManager.class));
@@ -1484,6 +1495,9 @@ final class KeyGestureController {
             resolver.registerContentObserver(Settings.Global.getUriFor(
                             Settings.Global.KEY_CHORD_POWER_VOLUME_UP), false, this,
                     UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                            Settings.System.SWIPE_TO_SCREENSHOT), false, this,
+                    UserHandle.USER_ALL);
         }
 
         @Override
@@ -1560,6 +1574,18 @@ final class KeyGestureController {
             return (long) (KEYGUARD_SCREENSHOT_CHORD_DELAY_MULTIPLIER * delayMs);
         }
         return delayMs;
+    }
+
+    public void enableSwipeThreeFingerGesture(boolean enable){
+        if (enable) {
+            if (haveEnableGesture) return;
+            haveEnableGesture = true;
+            mWindowManagerFuncs.registerPointerEventListener(mSwipeToScreenshot, DEFAULT_DISPLAY);
+        } else {
+            if (!haveEnableGesture) return;
+            haveEnableGesture = false;
+            mWindowManagerFuncs.unregisterPointerEventListener(mSwipeToScreenshot, DEFAULT_DISPLAY);
+        }
     }
 
     public void dump(IndentingPrintWriter ipw) {
