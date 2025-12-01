@@ -628,6 +628,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private boolean mHandleVolumeKeysInWM;
 
     private boolean mTorchGesture;
+    private long mLastTorchToggleTime = 0;
 
     // Behavior of volume button music controls
     boolean mVolBtnMusicControls;
@@ -2595,7 +2596,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
         @Override
         boolean supportLongPress() {
-            return hasLongPressOnPowerBehavior();
+            return hasLongPressOnPowerBehavior() || mTorchGesture;
         }
 
         @Override
@@ -2655,17 +2656,25 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
 
         private void onLongPress(@NonNull SingleKeyGestureEvent event) {
-            if (mSingleKeyGestureDetector.beganFromNonInteractive() || isFlashLightIsOn()) {
-                if (mTorchGesture) {
-                    performHapticFeedback(HapticFeedbackConstants.LONG_PRESS,
-                            "Power - Long Press - Torch");
-                    toggleCameraFlash();
-                    return;
+            if ((mSingleKeyGestureDetector.beganFromNonInteractive() || isFlashLightIsOn()) 
+                    && mTorchGesture) {
+                if (event.getAction() == ACTION_START) {
+                    long now = SystemClock.uptimeMillis();
+                    if (now - mLastTorchToggleTime > 500) {
+                        mLastTorchToggleTime = now;
+                        performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, "Power - Long Press - Torch");
+                        toggleCameraFlash();
+                    }
+                    mPowerKeyHandled = true;
+                } else if (event.getAction() == ACTION_CANCEL) {
+                    mPowerKeyHandled = false;
                 }
-                if (!mSupportLongPressPowerWhenNonInteractive) {
-                    Slog.v(TAG, "Not support long press power when device is not interactive.");
-                    return;
-                }
+                return;
+            }
+            if (mSingleKeyGestureDetector.beganFromNonInteractive() 
+                    && !mSupportLongPressPowerWhenNonInteractive) {
+                Slog.v(TAG, "Not support long press power when device is not interactive.");
+                return;
             }
             // If Assistant mapped to long press, we send start, complete and cancel gesture
             // This is done to allow Assistant launch animation in SysUI. Will extend
