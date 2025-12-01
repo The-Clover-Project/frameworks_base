@@ -24,7 +24,7 @@
             <solid
                 android:color="@color/settingslib_materialColorSurfaceBright" />
             <corners
-                android:radius="4dp" />
+                android:radius="0dp" />
         </shape>
     </item>
 </ripple>

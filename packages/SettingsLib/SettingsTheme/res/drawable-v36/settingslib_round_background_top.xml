@@ -25,9 +25,9 @@
                 android:color="@color/settingslib_materialColorSurfaceBright" />
             <corners
                 android:topLeftRadius="@dimen/settingslib_preference_corner_radius"
-                android:bottomLeftRadius="4dp"
+                android:bottomLeftRadius="0dp"
                 android:topRightRadius="@dimen/settingslib_preference_corner_radius"
-                android:bottomRightRadius="4dp" />
+                android:bottomRightRadius="0dp" />
         </shape>
     </item>
 </ripple>

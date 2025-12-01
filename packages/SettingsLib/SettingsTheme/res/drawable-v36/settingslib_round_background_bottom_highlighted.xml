@@ -25,8 +25,8 @@
             <corners
                 android:bottomLeftRadius="@dimen/settingslib_preference_corner_radius"
                 android:bottomRightRadius="@dimen/settingslib_preference_corner_radius"
-                android:topLeftRadius="4dp"
-                android:topRightRadius="4dp" />
+                android:topLeftRadius="0dp"
+                android:topRightRadius="0dp" />
             <solid android:color="#42000000" />
         </shape>
     </item>

@@ -33,7 +33,7 @@
 
     <!-- space token -->
     <dimen name="settingslib_expressive_space_none">0dp</dimen>
-    <dimen name="settingslib_expressive_space_extrasmall1">2dp</dimen>
+    <dimen name="settingslib_expressive_space_extrasmall1">@dimen/settingslib_expressive_space_none</dimen>
     <dimen name="settingslib_expressive_space_extrasmall2">4dp</dimen>
     <dimen name="settingslib_expressive_space_extrasmall3">6dp</dimen>
     <dimen name="settingslib_expressive_space_extrasmall4">8dp</dimen>
