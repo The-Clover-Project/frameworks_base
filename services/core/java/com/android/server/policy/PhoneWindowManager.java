@@ -2658,7 +2658,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         private void onLongPress(@NonNull SingleKeyGestureEvent event) {
             if ((mSingleKeyGestureDetector.beganFromNonInteractive() || isFlashLightIsOn()) 
                     && mTorchGesture) {
-                if (event.getAction() == ACTION_START) {
+                if (event.getAction() == ACTION_COMPLETE) {
                     long now = SystemClock.uptimeMillis();
                     if (now - mLastTorchToggleTime > 500) {
                         mLastTorchToggleTime = now;
