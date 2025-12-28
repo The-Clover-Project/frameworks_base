@@ -104,4 +104,7 @@
     <!-- 4G icon instead LTE -->
     <string name="fourg_icon_title">4G icon</string>
 
+    <!-- QS button to enable adaptive brightness -->
+    <string name="accessibility_adaptive_brightness">Adaptive brightness</string>
+
 </resources>
