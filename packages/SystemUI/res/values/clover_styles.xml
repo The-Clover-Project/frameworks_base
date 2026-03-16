@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 -->
-<resources>
+<resources xmlns:androidprv="http://schemas.android.com/apk/prv/res/android">
     <style
         name="DateWeatherText"
         parent="@style/EnhancedSmartspaceTextTitle">
@@ -24,7 +24,7 @@
     </style>
     <style
         name="DefaultSmartspaceView">
-        <item name="remoteViewsCardCornerRadius">@dimen/lockscreen_remoteviews_card_corner_radius</item>
+        <item name="backgroundCornerRadius">@dimen/lockscreen_remoteviews_card_corner_radius</item>
     </style>
     <style
         name="DotStyle">
@@ -45,7 +45,7 @@
         name="EnhancedSmartspaceTextTitle"
         parent="@android:style/Theme.DeviceDefault.DayNight">
         <item name="android:textSize">?smartspaceTitleTextSize</item>
-        <item name="android:textColor">?android:textColorPrimary</item>
+        <item name="android:textColor">@androidprv:color/materialColorOnSurface</item>
         <item name="android:ellipsize">end</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:maxLines">1</item>
@@ -56,7 +56,7 @@
     </style>
     <style
         name="LauncherSmartspaceView">
-        <item name="remoteViewsCardCornerRadius">@dimen/launcher_remoteviews_card_corner_radius</item>
+        <item name="backgroundCornerRadius">@dimen/launcher_remoteviews_card_corner_radius</item>
     </style>
     <style
         name="LockscreenDotStyle"
