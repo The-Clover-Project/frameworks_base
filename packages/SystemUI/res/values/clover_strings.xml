@@ -111,4 +111,7 @@
     <!-- QS button to enable adaptive brightness -->
     <string name="accessibility_adaptive_brightness">Adaptive brightness</string>
 
+    <!-- Title for the data disabled indicator toggle in status bar tuner. -->
+    <string name="status_bar_data_disabled_indicator">Data disabled indicator</string>
+
 </resources>
