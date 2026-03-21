@@ -114,4 +114,7 @@
     <!-- Title for the data disabled indicator toggle in status bar tuner. -->
     <string name="status_bar_data_disabled_indicator">Data disabled indicator</string>
 
+    <!-- Title for the 4G/LTE icon toggle in status bar tuner. -->
+    <string name="status_bar_show_4g_for_lte">Show 4G instead of LTE</string>
+
 </resources>
