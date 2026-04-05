@@ -18,13 +18,22 @@ package com.android.systemui.statusbar.pipeline.battery.ui.composable
 
 import android.graphics.Rect
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.CornerRadius
@@ -35,9 +44,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.clipRect
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.drawscope.inset
 import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.graphics.withSave
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.MeasurePolicy
@@ -46,11 +59,19 @@ import androidx.compose.ui.layout.MeasureScope
 import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.layout.onLayoutRectChanged
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.text.PlatformTextStyle
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastFirst
 import androidx.compose.ui.util.fastFirstOrNull
+import com.android.settingslib.StatusBarIconSettings
+import com.android.settingslib.graph.ThemedBatteryDrawable
+import com.android.systemui.DualToneHandler
 import com.android.systemui.common.ui.compose.load
 import com.android.systemui.compose.modifiers.sysuiResTag
 import com.android.systemui.statusbar.phone.domain.interactor.IsAreaDark
@@ -167,6 +188,16 @@ fun UnifiedBattery(
     isDarkProvider: () -> IsAreaDark,
     modifier: Modifier,
 ) {
+    val context = LocalContext.current
+    if (StatusBarIconSettings.useClassicStatusBarIcons(context)) {
+        ClassicBattery(
+            viewModel = viewModel,
+            isDarkProvider = isDarkProvider,
+            modifier = modifier,
+        )
+        return
+    }
+
     var bounds by remember { mutableStateOf(Rect()) }
 
     val colorProvider = {
@@ -191,6 +222,139 @@ fun UnifiedBattery(
             },
         contentDescription = viewModel.contentDescription.load() ?: "",
     )
+}
+
+@Composable
+private fun ClassicBattery(
+    viewModel: BatteryViewModel,
+    isDarkProvider: () -> IsAreaDark,
+    modifier: Modifier,
+) {
+    val context = LocalContext.current
+    var bounds by remember { mutableStateOf(Rect()) }
+
+    val isDark = isDarkProvider().isDarkTheme(bounds)
+    val dualToneHandler = remember(context) { DualToneHandler(context) }
+    val intensity = if (isDark) 0f else 1f
+
+    var fgColor = dualToneHandler.getFillColor(intensity)
+    var bgColor = dualToneHandler.getBackgroundColor(intensity)
+    var singleToneColor = dualToneHandler.getSingleColor(intensity)
+
+    val frameColor = remember(context) {
+        context.getColor(com.android.settingslib.R.color.meter_background_color)
+    }
+    val drawable = remember(context) {
+        ThemedBatteryDrawable(context, frameColor)
+    }
+
+    val level = viewModel.level ?: 0
+    val isCharging = viewModel.attribution == BatteryGlyph.Bolt || viewModel.isCharging
+    val isPowerSave = viewModel.attribution == BatteryGlyph.Plus
+
+    if (singleToneColor == 0) {
+        singleToneColor =
+            if (isDark) {
+                context.getColor(com.android.settingslib.R.color.light_mode_icon_color_single_tone)
+            } else {
+                context.getColor(com.android.settingslib.R.color.dark_mode_icon_color_single_tone)
+            }
+    }
+    if (fgColor == 0) {
+        fgColor = singleToneColor
+    }
+    if (bgColor == 0) {
+        bgColor = frameColor
+    }
+
+    if (drawable.charging != isCharging) {
+        drawable.charging = isCharging
+    }
+    if (drawable.powerSaveEnabled != isPowerSave) {
+        drawable.powerSaveEnabled = isPowerSave
+    }
+    if (drawable.getBatteryLevel() != level) {
+        drawable.setBatteryLevel(level)
+    }
+    drawable.setColors(fgColor, bgColor, singleToneColor)
+
+    Row(
+        modifier =
+            modifier
+                .sysuiResTag(BatteryViewModel.TEST_TAG)
+                .wrapContentWidth()
+                .onLayoutRectChanged { relativeLayoutBounds ->
+                    bounds =
+                        with(relativeLayoutBounds.boundsInScreen) {
+                            Rect(left, top, right, bottom)
+                        }
+                },
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        key(level, isCharging, isPowerSave, singleToneColor, fgColor, bgColor) {
+            Canvas(
+                modifier =
+                    Modifier.fillMaxHeight()
+                        .aspectRatio(
+                            ThemedBatteryDrawable.WIDTH / ThemedBatteryDrawable.HEIGHT,
+                            matchHeightConstraintsFirst = true,
+                        ),
+                contentDescription = viewModel.contentDescription.load() ?: "",
+            ) {
+                val currentCharging =
+                    viewModel.attribution == BatteryGlyph.Bolt || viewModel.isCharging
+                val currentPowerSave = viewModel.attribution == BatteryGlyph.Plus
+                val currentLevel = viewModel.level ?: 0
+
+                if (drawable.charging != currentCharging) {
+                    drawable.charging = currentCharging
+                }
+                if (drawable.powerSaveEnabled != currentPowerSave) {
+                    drawable.powerSaveEnabled = currentPowerSave
+                }
+                if (drawable.getBatteryLevel() != currentLevel) {
+                    drawable.setBatteryLevel(currentLevel)
+                }
+                drawable.setColors(fgColor, bgColor, singleToneColor)
+
+                val w = size.width.roundToInt()
+                val h = size.height.roundToInt()
+                if (w > 0 && h > 0) {
+                    drawable.setBounds(0, 0, w, h)
+                    drawIntoCanvas { canvas ->
+                        canvas.withSave {
+                            drawable.draw(canvas.nativeCanvas)
+                        }
+                    }
+                }
+            }
+        }
+
+        if (viewModel.glyphList.isNotEmpty()) {
+            val baseStyle = BatteryViewModel.getStatusBarBatteryTextStyle(context)
+            val fontScale = baseStyle.fontSize.value / 14f
+            val fontSize = (12 * fontScale).sp
+            val textStyle =
+                baseStyle.copy(
+                    fontSize = fontSize,
+                    lineHeight = (13 * fontScale).sp,
+                    platformStyle = PlatformTextStyle(includeFontPadding = false),
+                    lineHeightStyle =
+                        LineHeightStyle(
+                            alignment = LineHeightStyle.Alignment.Center,
+                            trim = LineHeightStyle.Trim.Both,
+                        ),
+                )
+            Text(
+                text = "$level%",
+                color = Color(singleToneColor),
+                style = textStyle,
+                modifier =
+                    Modifier.padding(start = 4.dp)
+                        .offset(y = ((-1f) * fontScale).dp),
+            )
+        }
+    }
 }
 
 @Composable

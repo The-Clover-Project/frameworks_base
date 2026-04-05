@@ -53,7 +53,9 @@ class ModernStatusBarMobileView(context: Context, attrs: AttributeSet?) :
     }
 
     public override fun onConfigurationChanged(newConfig: Configuration?) {
-        configureLayoutForNewStatusBarIcons()
+        if (NewStatusBarIcons.isEnabled) {
+            configureLayoutForNewStatusBarIcons()
+        }
     }
 
     /**

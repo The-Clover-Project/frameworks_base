@@ -18,6 +18,7 @@ package com.android.systemui.shade.carrier;
 
 import android.annotation.StyleRes;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
@@ -38,6 +39,13 @@ public class ShadeCarrierGroup extends LinearLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
         getNoSimTextView().setGravity(Gravity.CENTER_VERTICAL | Gravity.END);
+        updateResources();
+    }
+
+    @Override
+    protected void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        updateResources();
     }
 
     TextView getNoSimTextView() {
@@ -70,5 +78,15 @@ public class ShadeCarrierGroup extends LinearLayout {
         getCarrier1View().updateTextAppearanceAndTint(resId, fgColor, bgColor);
         getCarrier2View().updateTextAppearanceAndTint(resId, fgColor, bgColor);
         getCarrier3View().updateTextAppearanceAndTint(resId, fgColor, bgColor);
+    }
+
+    private void updateResources() {
+        final int dividerWidth =
+                getResources().getDimensionPixelSize(
+                        R.dimen.qs_header_carrier_separator_width);
+        getCarrierDivider1().getLayoutParams().width = dividerWidth;
+        getCarrierDivider1().requestLayout();
+        getCarrierDivider2().getLayoutParams().width = dividerWidth;
+        getCarrierDivider2().requestLayout();
     }
 }

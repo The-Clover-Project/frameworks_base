@@ -518,20 +518,26 @@ public class KeyguardStatusBarViewController extends ViewController<KeyguardStat
         if (Flags.bouncerUiRevamp()) {
             collectFlow(mView, mKeyguardInteractor.primaryBouncerShowing, x -> updateViewState());
         }
-        if (NewStatusBarIcons.isEnabled() && !SystemStatusIconsInCompose.isEnabled()) {
+        if (!SystemStatusIconsInCompose.isEnabled()) {
             if (!SceneContainerFlag.isEnabled()) {
                 mBatteryComposeView = createAndBindComposeBattery();
             }
+            mSystemIconsContainer.setClipChildren(false);
+            mSystemIconsContainer.setClipToPadding(false);
             mSystemIconsContainer.addView(mBatteryComposeView, -1);
             // Set the margins for the system icons appropriately
-            AlphaOptimizedLinearLayout systemIcons =
-                    mSystemIconsContainer.findViewById(R.id.statusIcons);
-            SystemStatusIconsLayoutHelper.configurePaddingForNewStatusBarIcons(systemIcons);
+            if (NewStatusBarIcons.isEnabled()) {
+                AlphaOptimizedLinearLayout systemIcons =
+                        mSystemIconsContainer.findViewById(R.id.statusIcons);
+                SystemStatusIconsLayoutHelper.configurePaddingForNewStatusBarIcons(systemIcons);
+            }
         }
     }
 
     private ComposeView createAndBindComposeBattery() {
         ComposeView batteryComposeView = new ComposeView(mContext);
+        batteryComposeView.setClipChildren(false);
+        batteryComposeView.setClipToPadding(false);
         UnifiedBatteryViewBinder.bind(
                 batteryComposeView,
                 mBatteryViewModel,

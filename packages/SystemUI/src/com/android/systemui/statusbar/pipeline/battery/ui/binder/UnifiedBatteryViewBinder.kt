@@ -51,6 +51,8 @@ object UnifiedBatteryViewBinder {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 view.apply {
                     isVisible = true
+                    clipChildren = false
+                    clipToPadding = false
                     setViewCompositionStrategy(
                         if (SceneContainerFlag.isEnabled) {
                             ViewCompositionStrategy.Default

@@ -96,14 +96,20 @@ open class ThemedBatteryDrawable(private val context: Context, frameColor: Int) 
 
     var charging = false
         set(value) {
-            field = value
-            postInvalidate()
+            if (field != value) {
+                field = value
+                levelColor = batteryColorForLevel(batteryLevel)
+                postInvalidate()
+            }
         }
 
     var powerSaveEnabled = false
         set(value) {
-            field = value
-            postInvalidate()
+            if (field != value) {
+                field = value
+                levelColor = batteryColorForLevel(batteryLevel)
+                postInvalidate()
+            }
         }
 
     private val fillColorStrokePaint = Paint(Paint.ANTI_ALIAS_FLAG).also { p ->

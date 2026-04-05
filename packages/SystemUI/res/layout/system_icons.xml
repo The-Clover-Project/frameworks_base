@@ -23,6 +23,8 @@
     android:paddingTop="@dimen/status_bar_icons_padding_top"
     android:paddingStart="@dimen/status_bar_icons_padding_start"
     android:paddingEnd="@dimen/status_bar_icons_padding_end"
+    android:clipChildren="false"
+    android:clipToPadding="false"
     android:gravity="center_vertical">
 
     <com.android.systemui.statusbar.phone.StatusIconContainer android:id="@+id/statusIcons"

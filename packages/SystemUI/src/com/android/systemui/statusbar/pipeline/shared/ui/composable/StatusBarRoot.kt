@@ -310,8 +310,8 @@ fun StatusBarRoot(
                         iconController,
                     )
 
+                    addBatteryComposable(phoneStatusBarView, statusBarViewModel)
                     if (NewStatusBarIcons.isEnabled) {
-                        addBatteryComposable(phoneStatusBarView, statusBarViewModel)
                         // Also adjust the paddings :)
                         SystemStatusIconsLayoutHelper.configurePaddingForNewStatusBarIcons(
                             phoneStatusBarView.requireViewById(R.id.statusIcons)
@@ -590,6 +590,8 @@ private fun addBatteryComposable(
 ) {
     val batteryComposeView =
         ComposeView(phoneStatusBarView.context).apply {
+            clipChildren = false
+            clipToPadding = false
             setContent {
                 val height =
                     with(LocalDensity.current) {
@@ -607,6 +609,8 @@ private fun addBatteryComposable(
             }
         }
     phoneStatusBarView.findViewById<ViewGroup>(R.id.system_icons).apply {
+        clipChildren = false
+        clipToPadding = false
         addView(batteryComposeView, -1)
     }
 }

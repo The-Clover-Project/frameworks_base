@@ -769,7 +769,7 @@ private fun ShadeCarrierGroupKairos(
 ) {
     val textColor = ShadeHeader.Colors.textColor
     val inverseTextColor = ShadeHeader.Colors.inverseTextColor
-    Row(modifier = modifier) {
+    Row(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(5.dp)) {
         ActivatedKairosSpec(
             buildSpec = viewModel.mobileIconsViewModelKairos.get().composeWrapper(),
             kairosNetwork = viewModel.kairosNetwork,

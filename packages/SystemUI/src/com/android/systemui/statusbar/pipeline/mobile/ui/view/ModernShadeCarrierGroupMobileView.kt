@@ -18,6 +18,7 @@ package com.android.systemui.statusbar.pipeline.mobile.ui.view
 
 import android.annotation.StyleRes
 import android.content.Context
+import android.content.res.Configuration
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
@@ -61,6 +62,14 @@ class ModernShadeCarrierGroupMobileView(context: Context, attrs: AttributeSet?) 
      */
     fun setStyleAndTint(@StyleRes styleResId: Int, fgColor: Int, bgColor: Int) {
         binding.setStyleAndTint(style = styleResId, fgColor = fgColor, bgColor = bgColor)
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration?) {
+        super.onConfigurationChanged(newConfig)
+        if (NewStatusBarIcons.isEnabled) {
+            val iconView = findViewById<ModernStatusBarMobileView>(R.id.mobile_combo)
+            iconView?.configureLayoutForNewStatusBarIcons()
+        }
     }
 
     override fun toString(): String {

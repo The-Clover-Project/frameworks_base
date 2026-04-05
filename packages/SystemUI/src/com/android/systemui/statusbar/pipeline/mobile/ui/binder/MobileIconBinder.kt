@@ -228,10 +228,13 @@ object MobileIconBinder {
                     launch {
                         viewModel.roaming.distinctUntilChanged().collect { isRoaming ->
                             if (NewStatusBarIcons.isEnabled) {
+                                roamingView.isVisible = false
+                                roamingSpace.isVisible = false
                                 endSideRoamingView.isVisible = isRoaming
                             } else {
                                 roamingView.isVisible = isRoaming
                                 roamingSpace.isVisible = isRoaming
+                                endSideRoamingView.isVisible = false
                             }
                         }
                     }
