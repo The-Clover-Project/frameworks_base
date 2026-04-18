@@ -1066,4 +1066,14 @@ interface IActivityManager {
      */
     oneway void reportOptimizationInfo(in IBinder app, in String compilerFilter,
             in String compilationReason);
+
+    String getSpoofPifConfig();
+
+    String getSpoofGamePropsConfig();
+
+    String getSpoofTrickyStoreTarget();
+
+    String getSpoofTrickyStoreKeyBox();
+
+    String getSpoofTrickyStorePatch();
 }
