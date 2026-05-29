@@ -106,9 +106,7 @@ import com.android.systemui.brightness.ui.compose.AnimationSpecs.IconDisappearSp
 import com.android.systemui.brightness.ui.compose.Dimensions.IconPadding
 import com.android.systemui.brightness.ui.compose.Dimensions.IconSize
 import com.android.systemui.brightness.ui.compose.Dimensions.SliderBackgroundFrameSize
-import com.android.systemui.brightness.ui.compose.Dimensions.SliderBackgroundRoundedCorner
 import com.android.systemui.brightness.ui.compose.Dimensions.ThumbHeight
-import com.android.systemui.brightness.ui.compose.Dimensions.SliderTrackRoundedCorner
 import com.android.systemui.brightness.ui.compose.Dimensions.ThumbTrackGapSize
 import com.android.systemui.brightness.ui.compose.Dimensions.ThumbWidth
 import com.android.systemui.brightness.ui.compose.Dimensions.TrackHeight
@@ -346,7 +344,7 @@ fun BrightnessSlider(
                                     )
                                 }
                             },
-                    trackCornerSize = SliderTrackRoundedCorner,
+                    trackCornerSize = TrackHeight / 2,
                     trackInsideCornerSize = 2.dp,
                     drawStopIndicator = null,
                     thumbTrackGapSize = ThumbTrackGapSize,
@@ -377,7 +375,7 @@ private fun Modifier.sliderBackground(color: Color) = drawWithCache {
     val offsetAround = SliderBackgroundFrameSize.toSize()
     val newSize = Size(size.width + 2 * offsetAround.width, size.height + 2 * offsetAround.height)
     val offset = Offset(-offsetAround.width, -offsetAround.height)
-    val cornerRadius = CornerRadius(SliderBackgroundRoundedCorner.toPx())
+    val cornerRadius = CornerRadius(newSize.height / 2)
     onDrawBehind {
         drawRoundRect(color = color, topLeft = offset, size = newSize, cornerRadius = cornerRadius)
     }
@@ -493,7 +491,7 @@ fun BrightnessSliderContainer(
             modifier =
                 Modifier.borderOnFocus(
                         color = MaterialTheme.colorScheme.secondary,
-                        cornerSize = CornerSize(SliderTrackRoundedCorner),
+                        cornerSize = CornerSize(50),
                     )
                     .then(if (viewModel.showMirror) Modifier.drawInOverlay() else Modifier)
                     .sliderBackground(containerColor)
@@ -527,8 +525,6 @@ data class ContainerColors(val idleColor: Color, val mirrorColor: Color) {
 
 private object Dimensions {
     val SliderBackgroundFrameSize = DpSize(10.dp, 6.dp)
-    val SliderBackgroundRoundedCorner = 24.dp
-    val SliderTrackRoundedCorner = 12.dp
     val IconSize = DpSize(28.dp, 28.dp)
     val IconPadding = 6.dp
     val ThumbTrackGapSize = 6.dp
