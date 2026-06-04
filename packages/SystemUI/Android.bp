@@ -566,8 +566,6 @@ android_library {
         "//frameworks/libs/systemui:iconloader_base",
         "SystemUI-tags",
         "SystemUI-proto",
-        "smartspace-proto-java",
-        "smartspace-proto-lite-java",
         "monet",
         "libmonet",
         "dagger2",
@@ -593,6 +591,7 @@ android_library {
         "kairos",
         "displaylib",
         "aconfig_settings_flags_lib",
+        "bcsmartspace-google",
     ],
     javacflags: [
         "-Aroom.schemaLocation=frameworks/base/packages/SystemUI/schemas",
