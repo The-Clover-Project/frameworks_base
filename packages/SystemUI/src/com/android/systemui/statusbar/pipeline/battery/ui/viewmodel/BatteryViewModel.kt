@@ -189,13 +189,18 @@ sealed class BatteryViewModel(
         fun create(): BatteryViewModel
     }
 
-    /** View model that shows the percentage based on the percent setting */
+    /** View model that shows the percentage based on the percent setting or when charging */
     class BasedOnUserSetting
     @AssistedInject
     constructor(interactor: BatteryInteractor, @Application context: Context) :
         BatteryViewModel(
             interactor = interactor,
-            shouldShowPercent = interactor.isBatteryPercentSettingEnabled,
+            shouldShowPercent =
+                combine(interactor.isCharging, interactor.isBatteryPercentSettingEnabled) {
+                    charging,
+                    settingEnabled ->
+                    charging || settingEnabled
+                },
             context = context,
         ) {
 
