@@ -110,4 +110,7 @@
     <!-- Name of the VoWiFi status bar tuner toggle. -->
     <string name="status_bar_vowifi_icon_title">VoWiFi</string>
 
+    <!-- Data disabled indicator -->
+    <string name="data_disabled_icon_title">Data disabled indicator</string>
+
 </resources>
