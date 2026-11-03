@@ -1026,6 +1026,17 @@ public final class ActiveServices {
             callerFg = true;
         }
 
+        if (service != null && service.getComponent() != null
+                && !android.os.Flags.nativeFrameworkPrototype()) {
+            final ComponentName cn = service.getComponent();
+            if (cn.getClassName().contains("NativeOnlySandboxedProcessService")) {
+                final String redirectedClass = cn.getClassName().replace(
+                        "NativeOnlySandboxedProcessService", "SandboxedProcessService");
+                service = new Intent(service);
+                service.setComponent(new ComponentName(cn.getPackageName(), redirectedClass));
+            }
+        }
+
         ServiceLookupResult res = retrieveServiceLocked(service, instanceName, isSdkSandboxService,
                 sdkSandboxClientAppUid, sdkSandboxClientAppPackage, resolvedType, callingPackage,
                 callingPid, callingUid, userId, true, callerFg, false, false, null, false, false);
@@ -4310,6 +4321,16 @@ public final class ActiveServices {
         if (sdkSandboxClientAppUid > 0) {
             attributedApp = mAm.getRecordForAppLOSP(sdkSandboxClientApplicationThread);
         }
+        if (service != null && service.getComponent() != null
+                && !android.os.Flags.nativeFrameworkPrototype()) {
+            final ComponentName cn = service.getComponent();
+            if (cn.getClassName().contains("NativeOnlySandboxedProcessService")) {
+                final String redirectedClass = cn.getClassName().replace(
+                        "NativeOnlySandboxedProcessService", "SandboxedProcessService");
+                service = new Intent(service);
+                service.setComponent(new ComponentName(cn.getPackageName(), redirectedClass));
+            }
+        }
         ServiceLookupResult res = retrieveServiceLocked(service, instanceName,
                 isSdkSandboxService, sdkSandboxClientAppUid, sdkSandboxClientAppPackage,
                 resolvedType, callingPackage, callingPid, callingUid, userId, true, callerFg,
@@ -5109,6 +5130,17 @@ public final class ActiveServices {
             throw new IllegalArgumentException("No instanceName provided for sdk sandbox process");
         }
 
+        if (service != null && service.getComponent() != null
+                && !android.os.Flags.nativeFrameworkPrototype()) {
+            final ComponentName cn = service.getComponent();
+            if (cn.getClassName().contains("NativeOnlySandboxedProcessService")) {
+                final String redirectedClass = cn.getClassName().replace(
+                        "NativeOnlySandboxedProcessService", "SandboxedProcessService");
+                service = new Intent(service);
+                service.setComponent(new ComponentName(cn.getPackageName(), redirectedClass));
+            }
+        }
+
         ServiceRecord r = null;
         if (DEBUG_SERVICE) Slog.v(TAG_SERVICE, "retrieveServiceLocked: " + service
                 + " type=" + resolvedType + " callingUid=" + callingUid);
@@ -5149,6 +5181,12 @@ public final class ActiveServices {
             if (DEBUG_SERVICE && r != null) Slog.v(TAG_SERVICE, "Retrieved by intent: " + r);
         }
         if (r != null) {
+            if ((r.serviceInfo.flags & ServiceInfo.FLAG_NATIVE_SERVICE) != 0
+                    && !android.os.Flags.nativeFrameworkPrototype()) {
+                Slog.w(TAG_SERVICE, "Not retrieving native service " + r
+                        + " because native service framework is disabled");
+                return null;
+            }
             // Compared to resolveService below, the ServiceRecord here is retrieved from
             // ServiceMap so the package visibility doesn't apply to it. We need to filter it.
             if (mAm.getPackageManagerInternal().filterAppAccess(r.packageName, callingUid,
@@ -5238,6 +5276,12 @@ public final class ActiveServices {
                 if (sInfo == null) {
                     Slog.w(TAG_SERVICE, "Unable to start service " + service + " U=" + userId +
                           ": not found");
+                    return null;
+                }
+                if ((sInfo.flags & ServiceInfo.FLAG_NATIVE_SERVICE) != 0
+                        && !android.os.Flags.nativeFrameworkPrototype()) {
+                    Slog.w(TAG_SERVICE, "Not retrieving native service " + service
+                            + " because native service framework is disabled");
                     return null;
                 }
                 if (instanceName != null
